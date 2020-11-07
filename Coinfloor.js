@@ -14,7 +14,7 @@
 	var _idle_ping_timer_id = null;
 
 	module.exports = Coinfloor = (function(){
-		function Coinfloor(user_id, password, api_key, onConnect){
+		function Coinfloor(user_id, password, api_key, onConnect, onClose, onError){
 			this.user_id = user_id;
 			this.password = password;
 			this.api_key = api_key;
@@ -59,7 +59,20 @@
 					}
 				}
 			});
+
+			ws.on('close', function(code, reason) {
+				if (onClose) {
+					onClose(code, reason);
+				}
+			});
+	
+			ws.on('error', function(error, code) {
+				if (onError) {
+					onError(error, code);
+				}
+			});	
 		}
+
 
 		function _do_request(request, callback){
 			console.log("\nSending Request:")
@@ -253,6 +266,16 @@
 				id: id
 			}, callback);
 		};
+
+		/*
+		 * Cancels all open orders belonging to the authenticated user.
+		 */
+		Coinfloor.prototype.cancelAllOrders = function (callback) {
+			_do_request({
+				tag: _tag,
+				method: "CancelAllOrders",
+			}, callback);
+		};		
 
 		/*
 		 * Retrieves the trailing 30-day trading volume of the authenticated user
