@@ -38,8 +38,8 @@
 			/*
 			 * On each message call the relevant event handler
 			 */
-			ws.onmessage = function (data, flags) {
-				var msg = JSON.parse(data);
+			ws.onmessage = function (evt, flags) {
+				var msg = JSON.parse(evt.data);
 				if(msg !== undefined){
 					console.log("\nReceived Message:")
 					if(msg.error_code !== undefined && msg.error_code > 0){
