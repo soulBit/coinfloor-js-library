@@ -15,8 +15,8 @@
     "websocket"
   ],
   "author": {
-    "name": "Rory Greig",
-    "email": "rorygreig@gmail.com"
+    "name": "soul Bit",
+    "email": "soulBit@soundofsilver.co.uk"
   },
   "dependencies": {
     "ws": "",
@@ -25,6 +25,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/rorygreig/coinfloor-js-library.git"
+    "url": "git://github.com/soulBit/coinfloor-js-library.git"
   }
 }
