@@ -31,14 +31,14 @@
 			/*
 			 * set up websocket connection
 			 */
-			ws.on('open', function(data){
+			ws.onopen = function(data){
 				console.log('websocket connected to: ' + url);
-			});
+			};
 
 			/*
 			 * On each message call the relevant event handler
 			 */
-			ws.on('message', function (data, flags) {
+			ws.onmessage = function (data, flags) {
 				var msg = JSON.parse(data);
 				if(msg !== undefined){
 					console.log("\nReceived Message:")
@@ -57,19 +57,19 @@
 						}
 					}
 				}
-			});
+			}
 
-			ws.on('close', function(code, reason) {
+			ws.onclose = function(code, reason) {
 				if (onClose) {
 					onClose(code, reason);
 				}
-			});
+			};
 	
-			ws.on('error', function(error, code) {
+			ws.onerror = function(error, code) {
 				if (onError) {
 					onError(error, code);
 				}
-			});	
+			};
 		}
 
 
@@ -135,7 +135,7 @@
 			var signature = ecp.signECDSA(msg, privateKeySeed);
 
 			var request = {
-				  "tag": _tag,
+				  	"tag": _tag,
 					"method": "Authenticate",
 					"user_id": Number(user_id),
 					"cookie": cookie,
