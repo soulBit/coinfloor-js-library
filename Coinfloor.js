@@ -1,12 +1,11 @@
 (function() {
-	var SocketClient = require('ws');
 	var ecp = require('./ecp.js');
 	var btoa = require('btoa');
 	var atob = require('atob');
 
 	var url = "wss://api.coinfloor.co.uk/";
 
-	var ws = new SocketClient(url);
+	var ws = new WebSocket(url);
 
 	var _event_handlers = Object();
 	var _tag = 1;

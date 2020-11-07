@@ -19,7 +19,6 @@
     "email": "soulBit@soundofsilver.co.uk"
   },
   "dependencies": {
-    "ws": "",
     "btoa": "",
     "atob": ""
   },
