@@ -50,6 +50,8 @@ For a more detailed example see the example folder.
 
 `cancelOrder(id, callback)`
 
+`cancelAllOrders(callback)`
+
 `getTradeVolume(asset, callback)`
 
 `watchOrders(base, counter, watch, callback)`
