@@ -1,4 +1,4 @@
-This is a node.js wrapper for the Coinfloor websocket [API](https://github.com/coinfloor/API/blob/master/WEBSOCKET-README.md).
+This is a node.js wrapper for the Coinfloor websocket [API](https://github.com/coinfloor/API/blob/master/WEBSOCKET-README.md). Modified by soulBit to work with client-side WebSocket, and includes onClose/onError callback support.
 
 It implements all the functions of the API.
 It is a simple wrapper, so everything should work as documented in the Coinfloor documentation, including the scaling factors for prices and quantities.
@@ -7,7 +7,7 @@ This package was not written by the Coinfloor exchange, so please do not contact
 
 ### Install
 
-`npm install coinfloor`
+`npm install https://github.com/soulBit/coinfloor-js-library.git`
 
 ### Example
 
