@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	var ecp = require('./ecp.js');
 	var btoa = require('btoa');
 	var atob = require('atob');
@@ -12,8 +12,8 @@
 	var _result_handlers = Object();
 	var _idle_ping_timer_id = null;
 
-	module.exports = Coinfloor = (function(){
-		function Coinfloor(user_id, password, api_key, onConnect, onClose, onError){
+	module.exports = Coinfloor = (function () {
+		function Coinfloor(user_id, password, api_key, onConnect, onClose, onError) {
 			this.user_id = user_id;
 			this.password = password;
 			this.api_key = api_key;
@@ -21,9 +21,9 @@
 			/*
 			 * add authentication function to event handlers
 			 */
-			_event_handlers["Welcome"] =  function(msg){
+			_event_handlers["Welcome"] = function (msg) {
 				console.log("Authenticating");
-				authenticate(user_id, password, api_key, msg.nonce, function(){
+				authenticate(user_id, password, api_key, msg.nonce, function () {
 					onConnect();
 				});
 			};
@@ -31,7 +31,7 @@
 			/*
 			 * set up websocket connection
 			 */
-			ws.onopen = function(data){
+			ws.onopen = function (data) {
 				console.log('websocket connected to: ' + url);
 			};
 
@@ -40,32 +40,32 @@
 			 */
 			ws.onmessage = function (evt, flags) {
 				var msg = JSON.parse(evt.data);
-				if(msg !== undefined){
-					console.log("\nReceived Message:")
-					if(msg.error_code !== undefined && msg.error_code > 0){
-						console.log('error: ');
-						console.log( msg );
+				if (msg !== undefined) {
+					// console.log("\nReceived Message:")
+					if (msg.error_code !== undefined && msg.error_code > 0) {
+						// console.log('error: ');
+						// console.log(msg);
 					} else {
 						//call result handler function based on tag
-						if(msg.tag !== undefined){
+						if (msg.tag !== undefined) {
 							handleResult(msg);
 						}
 
 						//call event handler function if this is a notification
-						if(msg.notice !== undefined){
+						if (msg.notice !== undefined) {
 							handleNotification(msg);
 						}
 					}
 				}
 			}
 
-			ws.onclose = function(code, reason) {
+			ws.onclose = function (code, reason) {
 				if (onClose) {
 					onClose(code, reason);
 				}
 			};
-	
-			ws.onerror = function(error, code) {
+
+			ws.onerror = function (error, code) {
 				if (onError) {
 					onError(error, code);
 				}
@@ -73,11 +73,11 @@
 		}
 
 
-		function _do_request(request, callback){
-			console.log("\nSending Request:")
-			console.log(request);
+		function _do_request(request, callback) {
+			// console.log("\nSending Request:")
+			// console.log(request);
 			var tag = request.tag;
-			ws.send(JSON.stringify(request), function(err){ if(err) throw(err); });
+			ws.send(JSON.stringify(request), function (err) { if (err) throw (err); });
 			_result_handlers[tag] = callback;
 			_reset_idle_ping_timer();
 			_tag++;
@@ -89,22 +89,22 @@
 			}
 			_idle_ping_timer_id = setTimeout(function () {
 				console.log("\nSending ping request to keep connection open");
-				_do_request({ }, function () { });
+				_do_request({}, function () { });
 			}, 45000);
 		};
 
-		function handleNotification(msg){
+		function handleNotification(msg) {
 			var handler = _event_handlers[msg.notice];
-			if(handler !== undefined){
+			if (handler !== undefined) {
 				handler(msg);
 			} else {
 				console.log("No handler function for event: '" + msg.notice + "'");
 			}
 		}
 
-		function handleResult(msg){
+		function handleResult(msg) {
 			var handler = _result_handlers[msg.tag];
-			if(handler !== undefined && typeof(handler) === "function"){
+			if (handler !== undefined && typeof (handler) === "function") {
 				handler(msg);
 				delete _result_handlers[msg.tag];
 			}
@@ -135,15 +135,15 @@
 			var signature = ecp.signECDSA(msg, privateKeySeed);
 
 			var request = {
-				  	"tag": _tag,
-					"method": "Authenticate",
-					"user_id": Number(user_id),
-					"cookie": cookie,
-					"nonce": btoa(client_nonce),
-					"signature": [ btoa(signature.r), btoa(signature.s)]
+				"tag": _tag,
+				"method": "Authenticate",
+				"user_id": Number(user_id),
+				"cookie": cookie,
+				"nonce": btoa(client_nonce),
+				"signature": [btoa(signature.r), btoa(signature.s)]
 			};
 
-			_do_request(request, function(result){
+			_do_request(request, function (result) {
 				console.log("Successfully authenticated user: " + user_id);
 				callback(result);
 			});
@@ -153,7 +153,7 @@
 		* add a listener for a message notice, to be called when this
 		* message is received
 		*/
-		Coinfloor.prototype.addEventListener = function(notice, handler){
+		Coinfloor.prototype.addEventListener = function (notice, handler) {
 			_event_handlers[notice] = handler;
 		}
 
@@ -167,15 +167,15 @@
 			}, callback);
 		},
 
-		/*
-		 * Retrieves all open orders of the authenticated user.
-		 */
-		Coinfloor.prototype.getOrders = function (callback) {
-			_do_request({
-				tag: _tag,
-				method: "GetOrders"
-			}, callback);
-		};
+			/*
+			 * Retrieves all open orders of the authenticated user.
+			 */
+			Coinfloor.prototype.getOrders = function (callback) {
+				_do_request({
+					tag: _tag,
+					method: "GetOrders"
+				}, callback);
+			};
 
 		/*
 		 * Estimates the total (in units of the counter asset) for a market order
@@ -255,16 +255,16 @@
 			}, callback);
 		},
 
-		/*
-		 * Cancels the specified open order.
-		 */
-		Coinfloor.prototype.cancelOrder = function (id, callback) {
-			_do_request({
-				tag: _tag,
-				method: "CancelOrder",
-				id: id
-			}, callback);
-		};
+			/*
+			 * Cancels the specified open order.
+			 */
+			Coinfloor.prototype.cancelOrder = function (id, callback) {
+				_do_request({
+					tag: _tag,
+					method: "CancelOrder",
+					id: id
+				}, callback);
+			};
 
 		/*
 		 * Cancels all open orders belonging to the authenticated user.
@@ -274,7 +274,7 @@
 				tag: _tag,
 				method: "CancelAllOrders",
 			}, callback);
-		};		
+		};
 
 		/*
 		 * Retrieves the trailing 30-day trading volume of the authenticated user
@@ -292,7 +292,7 @@
 		 * Subscribes to (or unsubscribes from) the orders feed of the specified
 		 * order book. Subscribing to feeds does not require authentication.
 		 */
-		Coinfloor.prototype.watchOrders =  function (base, counter, watch, callback) {
+		Coinfloor.prototype.watchOrders = function (base, counter, watch, callback) {
 			_do_request({
 				tag: _tag,
 				method: "WatchOrders",
