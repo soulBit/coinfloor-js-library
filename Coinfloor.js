@@ -3,7 +3,7 @@
 	var btoa = require('btoa');
 	var atob = require('atob');
 
-	var url = "wss://api.coinfloor.co.uk/";
+	var url = "wss://apiv2.coinfloor.co.uk/";
 
 	var ws = new WebSocket(url);
 
